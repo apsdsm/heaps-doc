@@ -35,24 +35,40 @@ Don't forget to remove the event using removeEventTarget when disposing your obj
 
 ## Keyboard events
 
-Keyboard events can be observerd using the global event, check if the `event.kind` is `EKeyDown` or `EKeyUp`.
+Key press events can be observerd using a global event. In the event handler, check if the `event.kind` is `EKeyDown` or `EKeyUp`.
 
 ```haxe
 function onEvent(event : hxd.Event) {
 	switch(event.kind) {
-		case EKeyDown: trace('DOWN keyCode: ${event.keyCode}, charCode: ${event.charCode}');
-		case EKeyUp: trace('UP keyCode: ${event.keyCode}, charCode: ${event.charCode}');
+		case EKeyDown:
+            trace('DOWN keyCode: ${event.keyCode}, charCode: ${event.charCode}');
+		case EKeyUp:
+            trace('UP keyCode: ${event.keyCode}, charCode: ${event.charCode}');
 		case _:
 	}
 }
 hxd.Stage.getInstance().addEventTarget(onEvent);
 ```
 
-You can use the static functions `hxd.Key.isPressed`, `hxd.Key.isDown` and `hxd.Key.isReleased`.
+Note that you will only receive these events as fast as the OS sends them (e.g., as fast as the key repeat speed). To check if a button is being held down or released, check its [`Key`](api/hxd/Key.html) code using the static functions:
+- [`hxd.Key.isPressed`](api/hxd/Key.html#isPressed)
+- [`hxd.Key.isDown`](api/hxd/Key.html#isDown)
+- [`hxd.Key.isReleased`](api/hxd/Key.html#isReleased)
 
 ```haxe
+// check if the space key was pressed this update
 if (Key.isPressed(Key.SPACE)) {
-	trace("shoot!");
+	trace("start shooting!");
+}
+
+// check if the space key is being held down this update
+if (Key.isDown(Key.SPACE)) {
+    trace("maintain fire!");
+}
+
+// check if the space key was release this update
+if (Key.isReleased(Key.SPACE)) {
+    trace("hold your fire!");
 }
 ```
 
@@ -71,3 +87,4 @@ Don't forget to remove the event using removeEventTarget when disposing your obj
 
 
 All events callbacks in Heaps receive a [`hxd.Event`](api/hxd/Event.html) instance, which contains info about the event.
+
